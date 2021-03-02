@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-// import { degreesToRadians, getControlPos } from '../../utils';
+import { addImageButtonToRedux, updateImageButton} from '../../redux/imageButtonReducer/imageButtons.actions';
+import { selectImageButton } from '../../redux/imageButtonReducer/imageButtons.selectors';
 import ImageButton from '../../redux/ImageButton/ImageButton';
 import CircleControl from './CircleControl';
 // import RectControl from './RectControl';
@@ -9,7 +10,7 @@ class ImageButtonSVG extends Component {
     constructor(props){
         super(props);
         this.state = {
-            init: false,
+            // init: false,
             // active: false,
             lastMousePos : {x : 0, y: 0},
         }
@@ -22,6 +23,7 @@ class ImageButtonSVG extends Component {
 
 
     init(){
+        const { addImageButtonToRedux } = this.props;
                 // const { xModification, yModification } = this.state;
                 const {idx, crowdCircle} = this.props;
                 const { points, inc, centerX, centerY, imageButtonSize } = crowdCircle;
@@ -33,29 +35,33 @@ class ImageButtonSVG extends Component {
                                                         imageButtonSize
                                                         ); 
         
-        
-                this.setState({ imageButton: newImageButton, init: true });
+                addImageButtonToRedux(newImageButton)
+                //  this.setState({ imageButton: newImageButton, init: true });
+                
     }
 
     hoverVolumeControl = () => {
-        const { imageButton } = this.state;
+        const { idx, imageButton } = this.props;
         const updatedImageButton = {...imageButton};
         updatedImageButton.volumeControl.hover = !imageButton.volumeControl.hover;
-        this.setState({ imageButton : updatedImageButton });
+        // this.setState({ imageButton : updatedImageButton });
+        updateImageButton(idx, updatedImageButton);
     }
 
     hoverRotateControl = () => {
-        const { imageButton } = this.state;
+        const { idx, imageButton } = this.props;
         const updatedImageButton = {...imageButton};
         updatedImageButton.rotateControl.hover = !imageButton.rotateControl.hover;
-        this.setState({ imageButton : updatedImageButton });
+        // this.setState({ imageButton : updatedImageButton });
+        updateImageButton(idx, updatedImageButton)
     }
 
     hoverPitchControl = () => {
-        const { imageButton } = this.state;
+        const { idx, imageButton } = this.props;
         const updatedImageButton = {...imageButton};
         updatedImageButton.pitchControl.hover = !imageButton.pitchControl.hover;
-        this.setState({ imageButton : updatedImageButton });
+        // this.setState({ imageButton : updatedImageButton });
+        updateImageButton(idx, updatedImageButton);
     }
 
     toggleMain = () => {
@@ -66,65 +72,73 @@ class ImageButtonSVG extends Component {
     }
 
     toggleOutline(){
-        const { imageButton } = this.state;
+        const { idx, imageButton } = this.props;
         const updatedImageButton = {...imageButton};
         updatedImageButton.active = !updatedImageButton.active
-        this.setState({ imageButton : updatedImageButton });
+        // this.setState({ imageButton : updatedImageButton });
+        updateImageButton(idx, updatedImageButton);
     }
 
-    resetRotateControl = () => {
-        const { imageButton } = this.state;
-        const updatedImageButton = {...imageButton};
-        updatedImageButton.rotateControl.active = false;
-         updatedImageButton.rotateControl.hover = false;
-        this.setState({ imageButton : updatedImageButton });
-    }
+    // resetRotateControl = () => {
+    //     const { idx, imageButton } = this.state;
+    //     const updatedImageButton = {...imageButton};
+    //     updatedImageButton.rotateControl.active = false;
+    //      updatedImageButton.rotateControl.hover = false;
+    //     // this.setState({ imageButton : updatedImageButton });
+    //     updateImageButton(idx, updatedImageButton);
+    // }
 
-    resetVolumeControl = () => {
-        const { imageButton } = this.state;
-        const updatedImageButton = {...imageButton};
-        updatedImageButton.volumeControl.active = false;
-        // updatedImageButton.volumeControl.hover = false;
-        this.setState({ imageButton : updatedImageButton });
-    }
+    // resetVolumeControl = () => {
+    //     const { idx, imageButton } = this.state;
+    //     const updatedImageButton = {...imageButton};
+    //     updatedImageButton.volumeControl.active = false;
+    //     // updatedImageButton.volumeControl.hover = false;
+    //     // this.setState({ imageButton : updatedImageButton });
+    //     updateImageButton(idx, updatedImageButton);
+    // }
 
-    resetPitchControl = () => {
-        const { imageButton } = this.state;
-        const updatedImageButton = {...imageButton};
-        updatedImageButton.pitchControl.active = false;
-        // updatedImageButton.pitchControl.hover = false;
-        this.setState({ imageButton : updatedImageButton });
-    }
+    // resetPitchControl = () => {
+    //     const { idx, imageButton } = this.state;
+    //     const updatedImageButton = {...imageButton};
+    //     updatedImageButton.pitchControl.active = false;
+    //     // updatedImageButton.pitchControl.hover = false;
+    //     // this.setState({ imageButton : updatedImageButton });
+    //     updateImageButton(idx, updatedImageButton);
+    // }
 
     toggleRotateControl = () => {
-        const { imageButton } = this.state;
+        const { idx, imageButton } = this.props;
+        console.log('toggleRotate');
         const updatedImageButton = {...imageButton};
         updatedImageButton.rotateControl.active = !imageButton.rotateControl.active;
-        this.setState({ imageButton : updatedImageButton });
+        // this.setState({ imageButton : updatedImageButton });
+        updateImageButton(idx, updatedImageButton);
     }
 
     toggleVolumeControl = () => {
-        const { imageButton } = this.state;
+        const { idx, imageButton } = this.props;
         const updatedImageButton = {...imageButton};
         updatedImageButton.volumeControl.active = !imageButton.volumeControl.active;
-        this.setState({ imageButton : updatedImageButton });
+        // this.setState({ imageButton : updatedImageButton });
+        updateImageButton(idx, updatedImageButton);
     }
 
     togglePitchControl = () => {
-        const { imageButton } = this.state;
+        const { idx, imageButton } = this.props;
         const updatedImageButton = {...imageButton};
         updatedImageButton.pitchControl.active = !imageButton.pitchControl.active;
-        this.setState({ imageButton : updatedImageButton });
+        // this.setState({ imageButton : updatedImageButton });
+        updateImageButton(idx, updatedImageButton);
     }
 
     render(){
-        const { imageButton, init } = this.state;
-        const {idx, image, crowdCircle} = this.props;
+       
+        const {idx, image, crowdCircle, imageButton} = this.props;
         const { id } = crowdCircle;
-        // console.log(init, imageButton);
+        
         return ( 
             <g>
-                {init &&
+                {(imageButton != null) &&
             <g transform={`rotate(0,${imageButton.pos.x}, ${imageButton.pos.y})`}>
                 <defs>
                     <pattern id={`image${idx + id}`} height="100%" width="100%" patternContentUnits = "objectBoundingBox">
@@ -154,7 +168,7 @@ class ImageButtonSVG extends Component {
                     strokeWidth={imageButton.rotateControl.strokeWidth}
                     updateParentWithMouseDown={this.toggleRotateControl}
                     updateParentWithHover={this.hoverRotateControl}
-                    updateParentWithMouseUp={this.resetRotateControl}
+                    // updateParentWithMouseUp={this.resetRotateControl}
                 />
 
                  <CircleControl 
@@ -166,7 +180,7 @@ class ImageButtonSVG extends Component {
                     strokeWidth={imageButton.volumeControl.strokeWidth}
                     updateParentWithMouseDown={this.toggleVolumeControl}
                     updateParentWithHover={this.hoverVolumeControl}
-                    updateParentWithMouseUp={this.resetVolumeControl}
+                    // updateParentWithMouseUp={this.resetVolumeControl}
                 />
 
                 <CircleControl 
@@ -178,7 +192,7 @@ class ImageButtonSVG extends Component {
                     strokeWidth={imageButton.pitchControl.strokeWidth}
                     updateParentWithMouseDown={this.togglePitchControl}
                     updateParentWithHover={this.hoverPitchControl}
-                    updateParentWithMouseUp={this.resetPitchControl}
+                    // updateParentWithMouseUp={this.resetPitchControl}
                 /> 
 
                 {/* <RectControl 
@@ -205,62 +219,15 @@ class ImageButtonSVG extends Component {
     }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state, ownProps) => ({
     mousePos :  state.mouse.mousePos,
+    imageButton : selectImageButton(ownProps.idx)(state),
 })
 
-export default connect(mapStateToProps)(ImageButtonSVG)
+const mapDispatchToProps = dispatch => ({
+    addImageButtonToRedux : (imageButton) => dispatch(addImageButtonToRedux(imageButton)),
+    updateImageButton : (idx, imageButton) => dispatch(updateImageButton(idx, imageButton)),
+})
 
+export default connect(mapStateToProps, mapDispatchToProps)(ImageButtonSVG)
 
-
-                // {/* image with filter doesn't clip */}
-                // {/* <filter id={`image${idx}`} x="0%" y="0%" width="100%" height="100%">
-                //     <feImage xlinkHref={image}/>
-                // </filter>
-                // <circle cx={left} cy={top} r={100} filter={`url(#image${idx})`} /> */}
-
-
-// const ImageButtonSVG = ({idx, image, handleClick, crowdCircle}) => {
-
-//     // console.log(image, crowdCircle);
-//     return ( 
-     
-//         <g transform={`rotate(0,${x}, ${y})`}>
-//             <defs>
-//                 <pattern id={`image${idx + id}`} height="100%" width="100%" patternContentUnits = "objectBoundingBox">
-//                      <image x="0" y="0" height="1" width="1" xlinkHref={image} preserveAspectRatio = "none" ></image>
-//                 </pattern>
-//             </defs>
-            
-//             <circle onClick={() => handleClick(idx + id)} cx={x} cy={y} r={circleSize} fill={`url(#image${idx})`} />
-
-     
-//             <CircleControl 
-//                 x={circleControlPos.x} y={circleControlPos.y} r={circleSize/controlScaler} 
-//                 fill={controlFill}  
-//             />
-//             <RectControl 
-//                 x={volumeControlPos.x} y={volumeControlPos.y - controlHeight/2} width={controlWidth} height={controlHeight} 
-//                 // lineStart={volumeControlLineStart} lineEnd={volumeControlLineEnd}
-//                 transform={`rotate(${controlRotateTheta}, ${volumeControlPos.x}, ${volumeControlPos.y})`} 
-//                 fill={controlFill} stroke={controlStroke} strokeWidth={controlStrokeWidth}
-//             />
-//             <RectControl 
-//                 x={pitchControlPos.x} y={pitchControlPos.y - controlHeight/2} width={controlWidth} height={controlHeight} 
-//                 // lineStart={pitchControlLineStart} lineEnd={pitchControlLineEnd}
-//                 transform={`rotate(${controlRotateTheta}, ${pitchControlPos.x}, ${pitchControlPos.y})`} 
-//                 fill={controlFill} stroke={controlStroke} strokeWidth={controlStrokeWidth}
-//             />
-//             {/* image with filter doesn't clip */}
-//             {/* <filter id={`image${idx}`} x="0%" y="0%" width="100%" height="100%">
-//                 <feImage xlinkHref={image}/>
-//             </filter>
-//             <circle cx={left} cy={top} r={100} filter={`url(#image${idx})`} /> */}
-//         </g>
- 
-           
-
-//      );
-// }
- 
-// export default ImageButtonSVG;

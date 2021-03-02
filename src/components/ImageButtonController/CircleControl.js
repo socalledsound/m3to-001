@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 class CircleControl extends Component {
 
     render(){
-        const {x, y, r, fill, stroke, strokeWidth , updateParentWithMouseDown , updateParentWithHover, updateParentWithMouseUp} = this.props;
+        const {x, y, r, fill, stroke, strokeWidth , updateParentWithMouseDown , updateParentWithHover} = this.props;
         return ( 
             <circle  
                 cx={x} cy={y} r={r} fill={fill} 
@@ -11,7 +11,7 @@ class CircleControl extends Component {
                 onMouseDown={updateParentWithMouseDown}
                 onMouseEnter={updateParentWithHover}
                 onMouseLeave={updateParentWithHover}
-                onMouseUp={updateParentWithMouseUp}
+                // onMouseUp={updateParentWithMouseUp}
             />
          );
     }

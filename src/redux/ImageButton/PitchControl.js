@@ -2,9 +2,9 @@ import { getControlPos } from '../../utils';
 import { pitchControl } from '../../globalSettings';
 
 class PitchControl {
-    constructor (x, y, imageButtonSize, distFromCenter, theta){
-        this.pos = getControlPos(x, y, distFromCenter, theta);
-        this.size = imageButtonSize/pitchControl.scaler * 2;
+    constructor (x, y, imageButtonSize, theta){
+        this.pos = getControlPos(x, y, imageButtonSize * pitchControl.positionScaler, theta);
+        this.size = imageButtonSize/pitchControl.scaler;
         this.fill = pitchControl.fill;
         this.hoverFill = pitchControl.hoverFill;
         this.activeFill = pitchControl.activeFill;

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { updateMousePos } from '../redux/mouseReducer/mouse.actions';
+import { resetImageButtonStates } from '../redux/imageButtonReducer/imageButtons.actions';
 import { canvasWidth, canvasHeight, crowdCircles } from '../globalSettings';
 import { images } from '../redux/images';
 import GearThing from './GearThing';
@@ -32,11 +33,11 @@ class Main extends Component {
     }
 
     render(){
-       const { trigCrowdSound, updateMousePos } = this.props
+       const { trigCrowdSound, updateMousePos, resetImageButtonStates } = this.props
         return (
             <div
             onMouseMove={(e) => updateMousePos(e.clientX, e.clientY)}
-            // onMouseUp={() => this.props.resetClicked()}
+            onMouseUp={() => resetImageButtonStates()}
             style={{ overflow: "hidden" }}
             ref={this.svgRef}
         >
@@ -65,6 +66,7 @@ class Main extends Component {
 
 const mapDispatchToProps = dispatch => ({
     updateMousePos : () => dispatch(updateMousePos()),
+    resetImageButtonStates : () => dispatch(resetImageButtonStates()),
 })
 
 export default connect(null, mapDispatchToProps)(Main)

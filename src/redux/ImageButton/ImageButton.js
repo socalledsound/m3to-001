@@ -16,9 +16,9 @@ class ImageButton {
         this.sizeScaler = 1.0;
         this.stroke = imageButtonOutlineColor;
         this.strokeWidth = '5';
-        this.rotateControl = new RotateControl(x, y, imageButtonSize, imageButtonSize/1.5, degreesToRadians(idx * inc));
-        this.volumeControl = new VolumeControl(x, y, imageButtonSize, imageButtonSize  * 1.5, degreesToRadians(idx * inc));
-        this.pitchControl = new PitchControl(x, y, imageButtonSize, imageButtonSize  * 2.5, degreesToRadians(idx * inc));  
+        this.rotateControl = new RotateControl(x, y, imageButtonSize, degreesToRadians(idx * inc));
+        this.volumeControl = new VolumeControl(x, y, imageButtonSize, degreesToRadians(idx * inc));
+        this.pitchControl = new PitchControl(x, y, imageButtonSize, degreesToRadians(idx * inc));  
 
         // if I bring back rectangular controls will need
         //this.controlRotateTheta = idx * inc

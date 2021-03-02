@@ -7,8 +7,8 @@ export const numImages = 10;
 export const numButtons = numImages;
 
 //gear
-const radius = canvasWidth/6;
-const imageScaler = 3.5;
+const radius = canvasWidth/7;
+const imageScaler = 4;
 export const gearSpeed = 0.3;
 
 //playCircle
@@ -34,8 +34,9 @@ export const rotateControl = {
     activeFill : '#FF0000',
     stroke : '#333',
     strokeWidth : '2',
-    scaler : 6,
-    size : radius/8,
+    scaler : 4,
+    size : radius/8  * 1.5,
+    positionScaler : 0.65, 
 }
 
 export const volumeControl = {
@@ -44,8 +45,9 @@ export const volumeControl = {
     activeFill : '#FF00FF',
     stroke : '#000',
     strokeWidth : '2',
-    scaler : 6,
-    size : radius/3,
+    scaler : 3,
+    size : radius/3 * 2,
+    positionScaler : 1.9,
 }
 
 export const pitchControl = {
@@ -54,8 +56,9 @@ export const pitchControl = {
     activeFill : '#FFFF00',
     stroke : '#000',
     strokeWidth : '2',
-    scaler : 6,
-    size : radius/3,
+    scaler : 3,
+    size : radius/3 * 2,
+    positionScaler : 3.0,
 }
 
 // controlScaler,

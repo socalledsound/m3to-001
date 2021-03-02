@@ -1,9 +1,9 @@
 import { getControlPos } from '../../utils';
 import { volumeControl } from '../../globalSettings';
 class VolumeControl {
-    constructor (x, y, imageButtonSize, distFromCenter, theta){
-        this.pos = getControlPos(x, y, distFromCenter, theta);
-        this.size = imageButtonSize/volumeControl.scaler * 2;
+    constructor (x, y, imageButtonSize, theta){
+        this.pos = getControlPos(x, y, imageButtonSize * volumeControl.positionScaler, theta);
+        this.size = imageButtonSize/volumeControl.scaler;
         this.fill = volumeControl.fill;
         this.hoverFill = volumeControl.hoverFill;
         this.activeFill = volumeControl.activeFill;

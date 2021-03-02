@@ -10,5 +10,5 @@ export const rootReducer = combineReducers({
     resizecanvas : resizeCanvasReducer,
     gearsAnimation : gearAnimationReducer,
     mouse : mouseReducer,
-    imageButtons : imageButtonsReducer,
+    imageButtonsSlice : imageButtonsReducer,
 })
