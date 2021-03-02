@@ -11,6 +11,18 @@ const radius = canvasWidth/6;
 const imageScaler = 3.5;
 export const gearSpeed = 0.3;
 
+//playCircle
+export const playCircleSettings = {
+    fill : '#FFF',
+    hoverFill : '#FF00FF',
+    activeFill : '#00FF00',
+    stroke : '#000',
+    strokeWidth : '2',
+}
+
+
+
+
 // imageButton
 export const imageButtonOutlineColor = '#FF00FF';
 

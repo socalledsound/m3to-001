@@ -76,7 +76,7 @@ class ImageButtonSVG extends Component {
         const { imageButton } = this.state;
         const updatedImageButton = {...imageButton};
         updatedImageButton.rotateControl.active = false;
-        // updatedImageButton.rotateControl.hover = false;
+         updatedImageButton.rotateControl.hover = false;
         this.setState({ imageButton : updatedImageButton });
     }
 

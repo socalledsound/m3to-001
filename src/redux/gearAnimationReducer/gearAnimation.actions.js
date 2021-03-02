@@ -9,11 +9,11 @@ export const pauseAnimating = (idx) => {
     }
 }
 
-export const startAnimating = (idx) => {
+export const startAnimating = (idx, dir) => {
     return {
         type: GearAnimationActionTypes.START_ANIMATING,
         payload : {
-            idx
+            idx, dir
         }
     }
 }
