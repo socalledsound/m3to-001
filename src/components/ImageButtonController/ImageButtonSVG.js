@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { degreesToRadians, getControlPos } from '../../utils';
-import { imageButtonOutlineColor } from '../../globalSettings';
+// import { degreesToRadians, getControlPos } from '../../utils';
+import ImageButton from '../../redux/ImageButton/ImageButton';
 import CircleControl from './CircleControl';
 // import RectControl from './RectControl';
 
@@ -10,12 +10,7 @@ class ImageButtonSVG extends Component {
         super(props);
         this.state = {
             init: false,
-            active: false,
-            xModification : 0,
-            yModification : -40,
-            imageTheta : 0,
-            volScaler : 1.0,
-            pitchScaler : 1.0,
+            // active: false,
             lastMousePos : {x : 0, y: 0},
         }
         // this.init();
@@ -27,32 +22,40 @@ class ImageButtonSVG extends Component {
 
 
     init(){
-        // const { xModification, yModification } = this.state;
-        const {idx, crowdCircle} = this.props;
-        const { points, inc, centerX, centerY, circleSize } = crowdCircle;
-        const x = points[idx].x + centerX/2;
-        const y = points[idx].y + centerY/2;
-        const theta = degreesToRadians(idx * inc);
-        const rotateControlPos = getControlPos(x, y, circleSize/1.5, theta);
-        // const volumeControlPos = getControlPos(x, y, circleSize + xModification, theta);
+                // const { xModification, yModification } = this.state;
+                const {idx, crowdCircle} = this.props;
+                const { points, inc, centerX, centerY, imageButtonSize } = crowdCircle;
         
-        // const pitchControlPos = getControlPos(x, y, circleSize * -1.45 - 40, theta);
-        const volumeControlPos = getControlPos(x, y, circleSize + 60, theta);
-        const pitchControlPos = getControlPos(x, y, circleSize + 140, theta);
-  
-        // const volumeControlLineStart = getControlPos(x, y, circleSize * 1.1, theta);
-        // const volumeControlLineEnd = getControlPos(x, y, circleSize * 1.5, theta);
-        const controlRotateTheta = idx * inc;
+                // i think this centerX/2 offset is a mistake!!!  and maybe the cause of my earlier issues 
+                const newImageButton = new ImageButton( idx, inc, 
+                                                        points[idx].x + centerX/2, 
+                                                        points[idx].y + centerY/2, 
+                                                        imageButtonSize
+                                                        ); 
+        
+        
+                this.setState({ imageButton: newImageButton, init: true });
+    }
 
-        this.setState({
-            x,
-            y,
-            rotateControlPos,
-            volumeControlPos,
-            pitchControlPos,
-            controlRotateTheta,
-            init: true,
-        })
+    hoverVolumeControl = () => {
+        const { imageButton } = this.state;
+        const updatedImageButton = {...imageButton};
+        updatedImageButton.volumeControl.hover = !imageButton.volumeControl.hover;
+        this.setState({ imageButton : updatedImageButton });
+    }
+
+    hoverRotateControl = () => {
+        const { imageButton } = this.state;
+        const updatedImageButton = {...imageButton};
+        updatedImageButton.rotateControl.hover = !imageButton.rotateControl.hover;
+        this.setState({ imageButton : updatedImageButton });
+    }
+
+    hoverPitchControl = () => {
+        const { imageButton } = this.state;
+        const updatedImageButton = {...imageButton};
+        updatedImageButton.pitchControl.hover = !imageButton.pitchControl.hover;
+        this.setState({ imageButton : updatedImageButton });
     }
 
     toggleMain = () => {
@@ -63,74 +66,120 @@ class ImageButtonSVG extends Component {
     }
 
     toggleOutline(){
-        this.setState({ active: !this.state.active });
+        const { imageButton } = this.state;
+        const updatedImageButton = {...imageButton};
+        updatedImageButton.active = !updatedImageButton.active
+        this.setState({ imageButton : updatedImageButton });
     }
 
-    toggleRotateControl(){
-        console.log('rotate clicked');
+    resetRotateControl = () => {
+        const { imageButton } = this.state;
+        const updatedImageButton = {...imageButton};
+        updatedImageButton.rotateControl.active = false;
+        // updatedImageButton.rotateControl.hover = false;
+        this.setState({ imageButton : updatedImageButton });
+    }
+
+    resetVolumeControl = () => {
+        const { imageButton } = this.state;
+        const updatedImageButton = {...imageButton};
+        updatedImageButton.volumeControl.active = false;
+        // updatedImageButton.volumeControl.hover = false;
+        this.setState({ imageButton : updatedImageButton });
+    }
+
+    resetPitchControl = () => {
+        const { imageButton } = this.state;
+        const updatedImageButton = {...imageButton};
+        updatedImageButton.pitchControl.active = false;
+        // updatedImageButton.pitchControl.hover = false;
+        this.setState({ imageButton : updatedImageButton });
+    }
+
+    toggleRotateControl = () => {
+        const { imageButton } = this.state;
+        const updatedImageButton = {...imageButton};
+        updatedImageButton.rotateControl.active = !imageButton.rotateControl.active;
+        this.setState({ imageButton : updatedImageButton });
+    }
+
+    toggleVolumeControl = () => {
+        const { imageButton } = this.state;
+        const updatedImageButton = {...imageButton};
+        updatedImageButton.volumeControl.active = !imageButton.volumeControl.active;
+        this.setState({ imageButton : updatedImageButton });
+    }
+
+    togglePitchControl = () => {
+        const { imageButton } = this.state;
+        const updatedImageButton = {...imageButton};
+        updatedImageButton.pitchControl.active = !imageButton.pitchControl.active;
+        this.setState({ imageButton : updatedImageButton });
     }
 
     render(){
-        const {
-            x,
-            y,
-            rotateControlPos,
-            volumeControlPos,
-            pitchControlPos,
-            // controlRotateTheta,
-            init,
-            active,
-            // xModification,
-            // yModification,
-            imageTheta,
-            volScaler,
-            pitchScaler,
-        } = this.state;
+        const { imageButton, init } = this.state;
         const {idx, image, crowdCircle} = this.props;
-        const { id, circleSize, controlScaler, 
-                // controlWidth, controlHeight, 
-                controlFill, controlStroke, controlStrokeWidth } = crowdCircle;
-        
+        const { id } = crowdCircle;
+        // console.log(init, imageButton);
         return ( 
             <g>
                 {init &&
-            <g transform={`rotate(0,${x}, ${y})`}>
+            <g transform={`rotate(0,${imageButton.pos.x}, ${imageButton.pos.y})`}>
                 <defs>
                     <pattern id={`image${idx + id}`} height="100%" width="100%" patternContentUnits = "objectBoundingBox">
                          <image x="0" y="0" height="1" width="1" xlinkHref={image} preserveAspectRatio = "none" ></image>
                     </pattern>
                 </defs>
                 
-                <circle onClick={this.toggleMain} cx={x} cy={y} r={circleSize} 
+                <circle onClick={this.toggleMain} cx={imageButton.pos.x} cy={imageButton.pos.y} r={imageButton.size} 
                         fill={`url(#image${idx})`} 
-                        strokeWidth={5}
+                        strokeWidth={imageButton.strokeWidth}
                         transform={`rotate(
-                            ${imageTheta},
-                            ${x},
-                            ${y}
+                            ${imageButton.imageTheta},
+                            ${imageButton.pos.x},
+                            ${imageButton.pos.y}
                         )`}
-                        stroke={active ? imageButtonOutlineColor : ''}
+                        stroke={imageButton.active ? imageButton.stroke : ''}
                 />
     
                 
                 
                 <CircleControl 
-                    x={rotateControlPos.x} y={rotateControlPos.y} r={circleSize/controlScaler * 1.5} 
-                    fill={controlFill} stroke={controlStroke} strokeWidth={controlStrokeWidth}
-                    updateParent={this.toggleRotateControl}
+                    x={imageButton.rotateControl.pos.x} y={imageButton.rotateControl.pos.y} 
+                    r={imageButton.rotateControl.size} 
+                    fill={imageButton.rotateControl.active ? imageButton.rotateControl.activeFill :
+                            imageButton.rotateControl.hover ? imageButton.rotateControl.hoverFill : imageButton.rotateControl.fill} 
+                    stroke={imageButton.rotateControl.stroke} 
+                    strokeWidth={imageButton.rotateControl.strokeWidth}
+                    updateParentWithMouseDown={this.toggleRotateControl}
+                    updateParentWithHover={this.hoverRotateControl}
+                    updateParentWithMouseUp={this.resetRotateControl}
+                />
+
+                 <CircleControl 
+                    x={imageButton.volumeControl.pos.x} y={imageButton.volumeControl.pos.y} 
+                    r={imageButton.volumeControl.size} 
+                    fill={imageButton.volumeControl.active ? imageButton.volumeControl.activeFill :
+                            imageButton.volumeControl.hover ? imageButton.volumeControl.hoverFill : imageButton.volumeControl.fill} 
+                    stroke={imageButton.volumeControl.stroke} 
+                    strokeWidth={imageButton.volumeControl.strokeWidth}
+                    updateParentWithMouseDown={this.toggleVolumeControl}
+                    updateParentWithHover={this.hoverVolumeControl}
+                    updateParentWithMouseUp={this.resetVolumeControl}
                 />
 
                 <CircleControl 
-                    x={volumeControlPos.x} y={volumeControlPos.y} r={circleSize/controlScaler * 2 * volScaler} 
-                    fill={controlFill} stroke={controlStroke} strokeWidth={controlStrokeWidth}
-                    updateParent={this.toggleVolControl}
-                />
-
-                <CircleControl 
-                    x={pitchControlPos.x} y={pitchControlPos.y} r={circleSize/controlScaler * 2 * pitchScaler} 
-                    fill={controlFill} stroke={controlStroke} strokeWidth={controlStrokeWidth}
-                    updateParent={this.togglePitchControl}
-                />
+                    x={imageButton.pitchControl.pos.x} y={imageButton.pitchControl.pos.y} 
+                    r={imageButton.pitchControl.size} 
+                    fill={imageButton.pitchControl.active ? imageButton.pitchControl.activeFill :
+                            imageButton.pitchControl.hover ? imageButton.pitchControl.hoverFill : imageButton.pitchControl.fill} 
+                    stroke={imageButton.pitchControl.stroke} 
+                    strokeWidth={imageButton.pitchControl.strokeWidth}
+                    updateParentWithMouseDown={this.togglePitchControl}
+                    updateParentWithHover={this.hoverPitchControl}
+                    updateParentWithMouseUp={this.resetPitchControl}
+                /> 
 
                 {/* <RectControl 
                     x={volumeControlPos.x} y={volumeControlPos.y- controlHeight/8} width={controlWidth * 2} height={controlHeight/2} 
