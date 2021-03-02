@@ -79,33 +79,6 @@ class ImageButtonSVG extends Component {
         updateImageButton(idx, updatedImageButton);
     }
 
-    // resetRotateControl = () => {
-    //     const { idx, imageButton } = this.state;
-    //     const updatedImageButton = {...imageButton};
-    //     updatedImageButton.rotateControl.active = false;
-    //      updatedImageButton.rotateControl.hover = false;
-    //     // this.setState({ imageButton : updatedImageButton });
-    //     updateImageButton(idx, updatedImageButton);
-    // }
-
-    // resetVolumeControl = () => {
-    //     const { idx, imageButton } = this.state;
-    //     const updatedImageButton = {...imageButton};
-    //     updatedImageButton.volumeControl.active = false;
-    //     // updatedImageButton.volumeControl.hover = false;
-    //     // this.setState({ imageButton : updatedImageButton });
-    //     updateImageButton(idx, updatedImageButton);
-    // }
-
-    // resetPitchControl = () => {
-    //     const { idx, imageButton } = this.state;
-    //     const updatedImageButton = {...imageButton};
-    //     updatedImageButton.pitchControl.active = false;
-    //     // updatedImageButton.pitchControl.hover = false;
-    //     // this.setState({ imageButton : updatedImageButton });
-    //     updateImageButton(idx, updatedImageButton);
-    // }
-
     toggleRotateControl = () => {
         const { idx, imageButton } = this.props;
         console.log('toggleRotate');
