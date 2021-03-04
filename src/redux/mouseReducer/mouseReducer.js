@@ -2,6 +2,7 @@ import MouseActionTypes from './Mouse.actions.types';
 
 const INITIAL_MOUSE_STATE = {
     mousePos : {x : 0, y: 0},
+    mouseRef : null,
     dragging : false,
 }
 
@@ -15,6 +16,12 @@ export const mouseReducer = ( state = INITIAL_MOUSE_STATE, action) => {
                     y : action.payload.y
                 },
             }
+        case MouseActionTypes.STORE_MOUSE_REF : 
+            return {
+                ...state,
+                mouseRef : action.payload.mousePos,
+            }
+            
         default : 
             return {
                 ...state

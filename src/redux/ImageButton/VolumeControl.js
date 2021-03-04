@@ -1,8 +1,9 @@
-import { getControlPos } from '../../utils';
+import { degreesToRadians, getControlPos, getMarkCoords } from '../../utils';
 import { volumeControl } from '../../globalSettings';
 class VolumeControl {
-    constructor (x, y, imageButtonSize, theta){
-        this.pos = getControlPos(x, y, imageButtonSize * volumeControl.positionScaler, theta);
+    constructor (idx, inc, x, y, imageButtonSize ){
+        this.pos = getControlPos(x, y, imageButtonSize * volumeControl.positionScaler, degreesToRadians(idx * inc));
+        this.plusMarkPositions = getMarkCoords(1, 10, 10);
         this.size = imageButtonSize/volumeControl.scaler;
         this.fill = volumeControl.fill;
         this.hoverFill = volumeControl.hoverFill;

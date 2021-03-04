@@ -1,4 +1,5 @@
-import { circleCoords } from './utils';
+import CrowdCircle from "./redux/CrowdCircle";
+// import { circleCoords } from './utils';
 
 //general
 export const canvasWidth = window.innerWidth;
@@ -6,16 +7,26 @@ export const canvasHeight = window.innerHeight;
 export const numImages = 10;
 export const numButtons = numImages;
 
+const centerX = canvasWidth/2; 
+const centerY = canvasHeight/2.0;
+
 //gear
 const radius = canvasWidth/7;
 const imageScaler = 4;
 export const gearSpeed = 0.3;
 
+
+//crowdCircle
+const crowdCircle1 = new CrowdCircle(0, numImages, centerX, centerY, radius, imageScaler);
+
+export const crowdCircles = [crowdCircle1];
+
+
 //playCircle
 export const playCircleSettings = {
-    fill : '#FFF',
-    hoverFill : '#FF00FF',
-    activeFill : '#00FF00',
+    fill : '#FFFFFF99',
+    hoverFill : '#FF00FF99',
+    activeFill : '#00FF0099',
     stroke : '#000',
     strokeWidth : '2',
 }
@@ -24,11 +35,16 @@ export const playCircleSettings = {
 
 
 // imageButton
-export const imageButtonOutlineColor = '#FF00FF';
+export const imageButton = {
+    outlineColor : '#FF00FF',
+    rotateSpeed : 0.5,
+    sizeScaler : 1.0,
+}
 
 
 //image button controls
 export const rotateControl = {
+    type: 'rotate control',
     fill : '#CCC',
     hoverFill : '#FF0000aa',
     activeFill : '#FF0000',
@@ -40,6 +56,7 @@ export const rotateControl = {
 }
 
 export const volumeControl = {
+    type: 'volume control',
     fill : '#555',
     hoverFill : '#FF00FF33',
     activeFill : '#FF00FF',
@@ -51,6 +68,7 @@ export const volumeControl = {
 }
 
 export const pitchControl = {
+    type: 'pitch control',
     fill : '#666',
     hoverFill : '#FFFF0077',
     activeFill : '#FFFF00',
@@ -60,6 +78,19 @@ export const pitchControl = {
     size : radius/3 * 2,
     positionScaler : 3.0,
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // controlScaler,
 // controlWidth,
@@ -76,19 +107,9 @@ export const pitchControl = {
 // const centerX2 = canvasWidth/2; 
 // const centerY2 = canvasHeight/2.0;
 
-const centerX1 = canvasWidth/2; 
-const centerY1 = canvasHeight/2.0;
 
-const crowdCircle1 = {
-    id: 0,
-    numImages,
-    inc : 360/numImages,
-    radius,
-    centerX : centerX1,
-    centerY : centerY1,
-    imageButtonSize: radius/imageScaler,
-    points :  circleCoords(numImages, centerX1, centerY1, radius)
-}
+
+
 
 
 // export const crowdCircle2 = {
@@ -109,6 +130,6 @@ const crowdCircle1 = {
 // }
 
 // export const crowdCircles = [crowdCircle1, crowdCircle2];
-export const crowdCircles = [crowdCircle1];
+
 
 // export const points = circleCoords(images.length, centerX, centerY, radius);

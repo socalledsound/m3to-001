@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 
 const selectImageButtons = state => state.imageButtonsSlice.imageButtons;
-console.log(selectImageButtons);
+// console.log(selectImageButtons);
 export const selectImageButton = idx => 
     createSelector(
         [selectImageButtons],

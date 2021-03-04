@@ -1,8 +1,11 @@
-import { getControlPos } from '../../utils';
+import { getControlPos, degreesToRadians } from '../../utils';
 import { rotateControl } from '../../globalSettings';
 class RotateControl {
-    constructor(x, y, imageButtonSize, theta){
-        this.pos =  getControlPos(x, y, imageButtonSize * rotateControl.positionScaler, theta);
+    constructor(idx, inc, x, y, imageButtonSize){
+        this.rotationCenterPos = {x: x, y: y};
+        this.orginalTheta = idx * inc;
+        this.parentSize = imageButtonSize; 
+        this.pos = getControlPos(x, y, imageButtonSize * rotateControl.positionScaler, degreesToRadians(idx * inc));
         this.size = imageButtonSize/rotateControl.scaler;
         this.fill = rotateControl.fill;
         this.hoverFill = rotateControl.hoverFill;
@@ -11,9 +14,13 @@ class RotateControl {
         this.strokeWidth = rotateControl.strokeWidth;
         this.clicked = false;
         this.hover = false;
-        this.dragging = false;
-       
+        this.dragging = false;   
     }
+
+    updatePos = (theta) => {
+        this.pos = getControlPos(this.rotationCenterPos.x, this.rotationCenterPos.y, this.parentSize * rotateControl.positionScaler, degreesToRadians((this.originalTheta) + theta));
+    }
+
 }
 
 export default RotateControl 

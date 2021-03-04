@@ -31,9 +31,9 @@ export const gearAnimationReducer = ( state = INITIAL_ANIMATION_STATE, action) =
     case GearAnimationActionTypes.INCREMENT_THETA :
         const newTheta = [...state.theta];
         const thetaToUpdate = [...state.theta][action.payload.idx];
-        console.log(action.payload.idx);
-        console.log(state);
-        console.log(state.direction[action.payload.idx]);
+        // console.log(action.payload.idx);
+        // console.log(state);
+        // console.log(state.direction[action.payload.idx]);
         const updatedTheta = thetaToUpdate + (gearSpeed * state.direction[action.payload.idx]);
         // 
         newTheta[action.payload.idx] = updatedTheta;

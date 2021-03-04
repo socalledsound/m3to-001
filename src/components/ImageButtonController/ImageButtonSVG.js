@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { addImageButtonToRedux, updateImageButton} from '../../redux/imageButtonReducer/imageButtons.actions';
+import { mapVal } from '../../utils';
+import { storeMouseRef } from '../../redux/mouseReducer/mouse.actions';
+import { initTimer } from '../../redux/masterClock/masterClock.actions';
+import { trigCrowdSound, stopPlayingSound } from '../../redux/audio/audio.actions';
+import { addImageButtonToRedux, updateImageButton, setTweakingIdx, setRotatingIdx, setVolumingIdx, setPitchingIdx} from '../../redux/imageButtonReducer/imageButtons.actions';
 import { selectImageButton } from '../../redux/imageButtonReducer/imageButtons.selectors';
 import ImageButton from '../../redux/ImageButton/ImageButton';
 import CircleControl from './CircleControl';
@@ -26,13 +30,14 @@ class ImageButtonSVG extends Component {
         const { addImageButtonToRedux } = this.props;
                 // const { xModification, yModification } = this.state;
                 const {idx, crowdCircle} = this.props;
-                const { points, inc, centerX, centerY, imageButtonSize } = crowdCircle;
+                const { points, inc, center, imageButtonSize, angles } = crowdCircle;
         
-                // i think this centerX/2 offset is a mistake!!!  and maybe the cause of my earlier issues 
+                // i think this center.x/2 offset is a mistake!!!  and maybe the cause of my earlier issues ??
                 const newImageButton = new ImageButton( idx, inc, 
-                                                        points[idx].x + centerX/2, 
-                                                        points[idx].y + centerY/2, 
-                                                        imageButtonSize
+                                                        points[idx].x + center.x/2, 
+                                                        points[idx].y + center.y/2, 
+                                                        imageButtonSize,
+                                                        angles[idx],
                                                         ); 
         
                 addImageButtonToRedux(newImageButton)
@@ -40,8 +45,17 @@ class ImageButtonSVG extends Component {
                 
     }
 
+    calcImageSize(imageButton){
+        
+        const scaler = mapVal(imageButton.volumeControl.val,
+                                0.0, 2.0, 0.6,1.4);
+
+        return imageButton.size * scaler
+    }
+
+
     hoverVolumeControl = () => {
-        const { idx, imageButton } = this.props;
+        const { idx, imageButton, updateImageButton } = this.props;
         const updatedImageButton = {...imageButton};
         updatedImageButton.volumeControl.hover = !imageButton.volumeControl.hover;
         // this.setState({ imageButton : updatedImageButton });
@@ -49,7 +63,7 @@ class ImageButtonSVG extends Component {
     }
 
     hoverRotateControl = () => {
-        const { idx, imageButton } = this.props;
+        const { idx, imageButton, updateImageButton } = this.props;
         const updatedImageButton = {...imageButton};
         updatedImageButton.rotateControl.hover = !imageButton.rotateControl.hover;
         // this.setState({ imageButton : updatedImageButton });
@@ -64,50 +78,119 @@ class ImageButtonSVG extends Component {
         updateImageButton(idx, updatedImageButton);
     }
 
+    mouseUp = () => {
+        this.stopTweaking();
+        this.stopSound();
+    }
+
+    stopSound = () => {
+        const { idx, stopPlayingSound } = this.props;
+        stopPlayingSound(idx);
+    }
+
+    stopTweaking(){
+        const { idx, imageButton, updateImageButton } = this.props;
+        const updatedImageButton = {...imageButton};
+        updatedImageButton.active = false;
+        updatedImageButton.rotating = false;
+        updatedImageButton.voluming = false;
+        updatedImageButton.pitching = false;
+        updatedImageButton.tweaking = false;
+        updatedImageButton.rotateControl.active = false;
+        updatedImageButton.volumeControl.active = false;
+        updateImageButton(idx, updatedImageButton);
+    }
+
     toggleMain = () => {
-        const { trigCrowdSound, idx, crowdCircle} = this.props;
-        const { id } = crowdCircle;
-        trigCrowdSound(idx + id);
-        this.toggleOutline();
+        const { trigCrowdSound, idx, timerStarted, initTimer, imageButton, updateImageButton} = this.props;
+        const updatedImageButton = this.toggleMC({ ...imageButton});
+        const audioParameters = {vol: 1.0, rate: 1.0, offset: updatedImageButton.imageTheta};
+        const dir = 1;
+        trigCrowdSound(idx, audioParameters, dir);
+        updateImageButton(idx, updatedImageButton);
+        if(!timerStarted){
+            initTimer();
+        }
     }
 
-    toggleOutline(){
-        const { idx, imageButton } = this.props;
-        const updatedImageButton = {...imageButton};
-        updatedImageButton.active = !updatedImageButton.active
-        // this.setState({ imageButton : updatedImageButton });
-        updateImageButton(idx, updatedImageButton);
+    toggleMC = (imgButton) => {
+        imgButton.active = !imgButton.active;
+        imgButton.rotating = !imgButton.rotating;
+        imgButton.tweaking = !imgButton.tweaking;
+        return imgButton
     }
 
-    toggleRotateControl = () => {
-        const { idx, imageButton } = this.props;
-        console.log('toggleRotate');
-        const updatedImageButton = {...imageButton};
-        updatedImageButton.rotateControl.active = !imageButton.rotateControl.active;
-        // this.setState({ imageButton : updatedImageButton });
-        updateImageButton(idx, updatedImageButton);
+    setControlActive = (imgButton, setting) => {
+        imgButton.tweaking = setting;
+        setting.active = true;
+        return imgButton
     }
 
-    toggleVolumeControl = () => {
-        const { idx, imageButton } = this.props;
-        const updatedImageButton = {...imageButton};
-        updatedImageButton.volumeControl.active = !imageButton.volumeControl.active;
-        // this.setState({ imageButton : updatedImageButton });
+    toggleControl = (e) => {
+        const { idx, imageButton, storeMouseRef, mousePos, timerStarted, initTimer, updateImageButton, setTweakingIdx  } = this.props;
+        const imageButtonToUpdate = {...imageButton};
+        const setting = e.target.id; 
+        const updatedImageButton = this.setControlActive(imageButtonToUpdate, imageButtonToUpdate[setting]);
+        console.log(imageButtonToUpdate);
         updateImageButton(idx, updatedImageButton);
+        storeMouseRef(mousePos);
+        setTweakingIdx(idx);
+       
+        if(!timerStarted){
+            initTimer();
+        }
     }
 
-    togglePitchControl = () => {
-        const { idx, imageButton } = this.props;
-        const updatedImageButton = {...imageButton};
-        updatedImageButton.pitchControl.active = !imageButton.pitchControl.active;
-        // this.setState({ imageButton : updatedImageButton });
-        updateImageButton(idx, updatedImageButton);
-    }
+   
+
+    // toggleRotateControl = () => {
+    //     const { trigCrowdSound, idx, imageButton, storeMouseRef, mousePos, setRotatingIdx, timerStarted, initTimer, updateImageButton  } = this.props;
+    //     const imageButtonToUpdate = {...imageButton};
+    //     const updatedImageButton = this.setControlActive(imageButtonToUpdate, imageButtonToUpdate.rotateControl);
+    //     const audioParameters = {vol: 1.0, rate: 1.0, offset: updatedImageButton.imageTheta};
+    //     const dir = 1;
+    //     updateImageButton(idx, updatedImageButton);
+    //     storeMouseRef(mousePos);
+    //     setRotatingIdx(idx);
+    //     trigCrowdSound(idx, audioParameters, dir);
+    //     if(!timerStarted){
+    //         initTimer();
+    //     }
+    // }
+
+    // toggleVolumeControl = () => {
+    //     const { idx, imageButton, storeMouseRef, mousePos, setVolumingIdx, timerStarted, initTimer, updateImageButton  } = this.props;
+    //     const imageButtonToUpdate = {...imageButton};
+    //     const updatedImageButton = this.setControlActive(imageButtonToUpdate, imageButtonToUpdate.volumeControl);
+    //     // const audioParameters = {vol: 1.0, rate: 1.0, offset: updatedImageButton.imageTheta};
+    //     // const dir = 1;
+    //     updateImageButton(idx, updatedImageButton);
+    //     storeMouseRef(mousePos);
+    //     setVolumingIdx(idx);
+    //     // trigCrowdSound(idx, audioParameters, dir);
+    //     if(!timerStarted){
+    //         initTimer();
+    //     }
+    // }
+
+    // togglePitchControl = () => {
+    //     const { idx, imageButton, storeMouseRef, mousePos, setPitchingIdx, timerStarted, initTimer, updateImageButton  } = this.props;
+    //     const imageButtonToUpdate = {...imageButton};
+    //     const updatedImageButton = this.setControlActive(imageButtonToUpdate, imageButtonToUpdate.pitchControl);
+    //     updateImageButton(idx, updatedImageButton);
+    //     storeMouseRef(mousePos);
+    //     setPitchingIdx(idx);
+    //     // trigCrowdSound(idx, audioParameters, dir);
+    //     if(!timerStarted){
+    //         initTimer();
+    //     }
+    // }
 
     render(){
        
         const {idx, image, crowdCircle, imageButton} = this.props;
         const { id } = crowdCircle;
+        
         
         return ( 
             <g>
@@ -119,7 +202,7 @@ class ImageButtonSVG extends Component {
                     </pattern>
                 </defs>
                 
-                <circle onClick={this.toggleMain} cx={imageButton.pos.x} cy={imageButton.pos.y} r={imageButton.size} 
+                <circle  cx={imageButton.pos.x} cy={imageButton.pos.y} r={this.calcImageSize(imageButton)} 
                         fill={`url(#image${idx})`} 
                         strokeWidth={imageButton.strokeWidth}
                         transform={`rotate(
@@ -128,11 +211,14 @@ class ImageButtonSVG extends Component {
                             ${imageButton.pos.y}
                         )`}
                         stroke={imageButton.active ? imageButton.stroke : ''}
+                        // updateParentWithMouseDown={this.toggleMain}
+                        onClick={this.toggleMain}
                 />
     
                 
                 
-                <CircleControl 
+                {/* <CircleControl 
+                onClick={this.toggleRotateControl}
                     x={imageButton.rotateControl.pos.x} y={imageButton.rotateControl.pos.y} 
                     r={imageButton.rotateControl.size} 
                     fill={imageButton.rotateControl.active ? imageButton.rotateControl.activeFill :
@@ -140,34 +226,42 @@ class ImageButtonSVG extends Component {
                     stroke={imageButton.rotateControl.stroke} 
                     strokeWidth={imageButton.rotateControl.strokeWidth}
                     updateParentWithMouseDown={this.toggleRotateControl}
+                    updateParentWithMouseUp={this.mouseUp}
                     updateParentWithHover={this.hoverRotateControl}
                     // updateParentWithMouseUp={this.resetRotateControl}
-                />
-
+                /> */}
+                {imageButton.tweaking && 
+                <g>
                  <CircleControl 
+                    name="volumeControl"
                     x={imageButton.volumeControl.pos.x} y={imageButton.volumeControl.pos.y} 
                     r={imageButton.volumeControl.size} 
                     fill={imageButton.volumeControl.active ? imageButton.volumeControl.activeFill :
                             imageButton.volumeControl.hover ? imageButton.volumeControl.hoverFill : imageButton.volumeControl.fill} 
                     stroke={imageButton.volumeControl.stroke} 
                     strokeWidth={imageButton.volumeControl.strokeWidth}
-                    updateParentWithMouseDown={this.toggleVolumeControl}
+                    updateParentWithMouseDown={this.toggleControl}
+                    // updateParentWithMouseUp={this.mouseUp}
                     updateParentWithHover={this.hoverVolumeControl}
+                    
                     // updateParentWithMouseUp={this.resetVolumeControl}
                 />
 
                 <CircleControl 
+                    name="pitchControl"
                     x={imageButton.pitchControl.pos.x} y={imageButton.pitchControl.pos.y} 
                     r={imageButton.pitchControl.size} 
                     fill={imageButton.pitchControl.active ? imageButton.pitchControl.activeFill :
                             imageButton.pitchControl.hover ? imageButton.pitchControl.hoverFill : imageButton.pitchControl.fill} 
                     stroke={imageButton.pitchControl.stroke} 
                     strokeWidth={imageButton.pitchControl.strokeWidth}
-                    updateParentWithMouseDown={this.togglePitchControl}
+                    updateParentWithMouseDown={this.toggleControl}
+                    // updateParentWithMouseUp={this.mouseUp}
                     updateParentWithHover={this.hoverPitchControl}
                     // updateParentWithMouseUp={this.resetPitchControl}
                 /> 
-
+                </g>
+                    }
                 {/* <RectControl 
                     x={volumeControlPos.x} y={volumeControlPos.y- controlHeight/8} width={controlWidth * 2} height={controlHeight/2} 
                     // lineStart={volumeControlLineStart} lineEnd={volumeControlLineEnd}
@@ -200,6 +294,14 @@ const mapStateToProps = (state, ownProps) => ({
 const mapDispatchToProps = dispatch => ({
     addImageButtonToRedux : (imageButton) => dispatch(addImageButtonToRedux(imageButton)),
     updateImageButton : (idx, imageButton) => dispatch(updateImageButton(idx, imageButton)),
+    storeMouseRef : (mousePos) => dispatch(storeMouseRef(mousePos)),
+    setRotatingIdx : (idx) => dispatch(setRotatingIdx(idx)),
+    setVolumingIdx: (idx) => dispatch(setVolumingIdx(idx)), 
+    setPitchingIdx: (idx) => dispatch(setPitchingIdx(idx)),
+    setTweakingIdx: (idx) => dispatch(setTweakingIdx(idx)),
+    initTimer : ( ) => dispatch(initTimer()),
+    trigCrowdSound : (idx, audioParameters, dir) => dispatch(trigCrowdSound(idx, audioParameters, dir)),
+    stopPlayingSound : (idx) => dispatch(stopPlayingSound(idx)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ImageButtonSVG)

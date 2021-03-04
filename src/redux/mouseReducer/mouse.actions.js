@@ -8,3 +8,12 @@ export const updateMousePos = (x, y) => {
         }
     }
 }
+
+export const storeMouseRef = (mousePos) => {
+    return {
+        type : MouseActionTypes.STORE_MOUSE_REF,
+        payload : {
+            mousePos
+        }
+    }
+}
