@@ -5,7 +5,7 @@ import { resetImageButtonControlStates } from '../redux/imageButtonReducer/image
 import { canvasWidth, canvasHeight, crowdCircles } from '../globalSettings';
 import { images } from '../redux/images';
 import GearThing from './GearThing';
-
+// console.log(images);
 class Main extends Component {
     constructor(props){
         super(props)
@@ -34,6 +34,7 @@ class Main extends Component {
 
     mouseUp = (x, y) => {
         const { resetImageButtonControlStates } = this.props;
+        
         resetImageButtonControlStates();
         storeMouseRef({x : x, y: y});
     }

@@ -1,21 +1,24 @@
 import { circleCoords, getAngles } from '../utils';
 
 class CrowdCircle {
-    constructor(id, numImages, centerX, centerY, radius, imageScaler){
+    constructor(id, numCrowdCircles, centerX, centerY, imageScaler, radius, rotationSpeed, backgroundCircleScaler, controlUnitScaler){
         this.id = id;
-        this.inc = 360/numImages;
-        this.numImages = numImages;
-        this.imageScaler = imageScaler
+        this.inc = 360/numCrowdCircles;
+        this.numCrowdCircles = numCrowdCircles;
+        this.imageScaler = imageScaler;
+        this.backgroundCircleScaler = backgroundCircleScaler;
+        this.controlUnitScaler = controlUnitScaler;
         this.radius = radius;
         this.center = {x: centerX, y: centerY};
         this.imageButtonSize = radius/imageScaler;
-        this.points = circleCoords(numImages, centerX, centerY, radius);
-        this.angles = getAngles(numImages);
+        this.points = circleCoords(numCrowdCircles, centerX, centerY, radius);
+        this.angles = getAngles(numCrowdCircles);
+        this.rotationSpeed =  rotationSpeed;
     }
 
 
     getCircleCoords(){
-        this.points = circleCoords(this.numImages, this.center.x, this.center.y, this.radius);
+        this.points = circleCoords(this.numCrowdCircles, this.center.x, this.center.y, this.radius);
     }
 }
 

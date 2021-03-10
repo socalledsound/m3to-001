@@ -6,6 +6,7 @@ import { startAnimating, pauseAnimating, incrementTheta } from '../redux/gearAni
 import { updateImageButton, resetImageButtonStates } from '../redux/imageButtonReducer/imageButtons.actions';
 
 import PlayCircleComponent from './PlayCircleComponent';
+import { playCircleSettings } from '../globalSettings';
 import ImageButtonSVG from './ImageButtonController/ImageButtonSVG';
 import PlayCircle from '../redux/PlayCircle';
 // import { imageButton } from '../globalSettings';
@@ -39,12 +40,12 @@ class GearThing extends Component {
 
     initPlayCircles(){
         const { crowdCircle } = this.props;
-        const newPlayCircleBackward = new PlayCircle(crowdCircle.center.x - crowdCircle.radius * 0.3, 
-                                                    crowdCircle.center.y - crowdCircle.radius * 0.125, 
-                                                    crowdCircle.radius * 0.125);
-        const newPlayCircleForward = new PlayCircle(crowdCircle.center.x + crowdCircle.radius * 0.3, 
-                                                    crowdCircle.center.y - crowdCircle.radius * 0.125, 
-                                                    crowdCircle.radius * 0.125);
+        const newPlayCircleBackward = new PlayCircle(crowdCircle.center.x - crowdCircle.radius * playCircleSettings.playCircleXscaler, 
+            crowdCircle.center.y - crowdCircle.radius * playCircleSettings.playCircleYscaler, 
+            crowdCircle.radius * playCircleSettings.playCircleSizeScaler);
+        const newPlayCircleForward = new PlayCircle(crowdCircle.center.x + crowdCircle.radius * playCircleSettings.playCircleXscaler, 
+            crowdCircle.center.y - crowdCircle.radius * playCircleSettings.playCircleYscaler, 
+            crowdCircle.radius * playCircleSettings.playCircleSizeScaler);
 
         this.setState({ playCircleForward : newPlayCircleForward, playCircleBackward : newPlayCircleBackward, playCircleInit : true });
     }
@@ -162,7 +163,7 @@ class GearThing extends Component {
     render() { 
        const { playCircleForward, playCircleBackward, playingForward, playingBackward, playCircleInit } = this.state;
         const {idx, imgArray, crowdCircle, theta} = this.props;
-
+        // console.log(imgArray[idx]);
         // console.log(playCircleInit);
         // if(playCircleBackward !== null){
         //     // console.log(playCircleBackward.active);
@@ -175,8 +176,8 @@ class GearThing extends Component {
                 <g >
                     {/* <circle cx={400} cy={400} r={100} fill={'#00FF00'} /> */}
                     
-                    <circle cx={crowdCircle.center.x} cy={crowdCircle.center.y} r={crowdCircle.radius * 2.0} fill="#aaaaaa11" />  
-                    <circle  cx={crowdCircle.center.x} cy={crowdCircle.center.y} r={crowdCircle.radius * 0.5} fill="#aaaaaaaa" />  
+                    <circle cx={crowdCircle.center.x} cy={crowdCircle.center.y} r={crowdCircle.radius * crowdCircle.backgroundCircleScaler} fill="#aaaaaa11" />  
+                    <circle  cx={crowdCircle.center.x} cy={crowdCircle.center.y} r={crowdCircle.radius * crowdCircle.controlUnitScaler} fill="#aaaaaaaa" />  
                     {playCircleInit &&
                         <g>
                             {!playCircleBackward.active &&
@@ -230,13 +231,16 @@ class GearThing extends Component {
                     `}>
             
 
-                {imgArray.map((img, idx) => 
+                {crowdCircle.points.map((point, idx) => {
+                    // console.log(imgArray[idx], crowdCircle);
+                    return(
                     <ImageButtonSVG 
                         key={`crowdKey${idx}`} 
                         idx={idx} 
-                        image={img} 
+                        images={imgArray[idx]} 
                         crowdCircle={crowdCircle}/>
-                    )}         
+                    )}
+                         )}         
                 </g>
          </g>
          );

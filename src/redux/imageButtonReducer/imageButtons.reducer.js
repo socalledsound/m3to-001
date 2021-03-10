@@ -76,7 +76,12 @@ export const imageButtonsReducer = (state = INITIAL_IMAGE_BUTTONS_STATE, action)
                 ...state,
                 pitchingIdx : action.payload.idx
             }                     
-             
+        // case ImageButtonsActionTypes.INC_IMAGE_IDX :
+        //     return {
+        //         ...state,
+
+        //     }     
+
         default :
             return {
                 ...state

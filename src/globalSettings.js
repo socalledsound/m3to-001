@@ -4,26 +4,34 @@ import CrowdCircle from "./redux/CrowdCircle";
 //general
 export const canvasWidth = window.innerWidth;
 export const canvasHeight = window.innerHeight;
+export const numCrowdCircles = 7;
 export const numImages = 10;
-export const numButtons = numImages;
+export const numSounds = numCrowdCircles;
+export const numButtons = numCrowdCircles;
 
-const centerX = canvasWidth/2; 
-const centerY = canvasHeight/2.0;
+export const centerX = canvasWidth/2; 
+export const centerY = canvasHeight/2.0;
 
-//gear
-const radius = canvasWidth/7;
-const imageScaler = 4;
+//crowd circle
+export const crowdCircleRadius = canvasWidth/(numCrowdCircles);
+const backgroundCircleScaler = 2.25;
+const controlUnitScaler = 0.4;
+const imageScaler = numCrowdCircles/2.5;
 export const gearSpeed = 0.3;
+export const crowdCircleRotationSpeed = 0.3;
 
 
 //crowdCircle
-const crowdCircle1 = new CrowdCircle(0, numImages, centerX, centerY, radius, imageScaler);
+const crowdCircle1 = new CrowdCircle(0, numCrowdCircles, centerX, centerY, imageScaler, crowdCircleRadius, crowdCircleRotationSpeed, backgroundCircleScaler, controlUnitScaler);
 
 export const crowdCircles = [crowdCircle1];
 
 
 //playCircle
 export const playCircleSettings = {
+    playCircleSizeScaler : 0.1,
+    playCircleXscaler : 0.2,
+    playCircleYscaler : 0.125,
     fill : '#FFFFFF99',
     hoverFill : '#FF00FF99',
     activeFill : '#00FF0099',
@@ -38,7 +46,9 @@ export const playCircleSettings = {
 export const imageButton = {
     outlineColor : '#FF00FF',
     rotateSpeed : 0.5,
-    sizeScaler : 1.0,
+    numImages : numImages,
+    imgTransitionSpeed : 3,
+    sizeScaler : 2.0,
 }
 
 
@@ -51,7 +61,7 @@ export const rotateControl = {
     stroke : '#333',
     strokeWidth : '2',
     scaler : 4,
-    size : radius/8  * 1.5,
+    size : crowdCircleRadius/8  * 1.5,
     positionScaler : 0.65, 
 }
 
@@ -62,9 +72,9 @@ export const volumeControl = {
     activeFill : '#FF00FF',
     stroke : '#000',
     strokeWidth : '2',
-    scaler : 3,
-    size : radius/3 * 2,
-    positionScaler : 1.9,
+    scaler : 5,
+    size : crowdCircleRadius/10 * 2,
+    positionScaler : 2.0,
 }
 
 export const pitchControl = {
@@ -74,9 +84,9 @@ export const pitchControl = {
     activeFill : '#FFFF00',
     stroke : '#000',
     strokeWidth : '2',
-    scaler : 3,
-    size : radius/3 * 2,
-    positionScaler : 3.0,
+    scaler : 5,
+    size : crowdCircleRadius/10 * 2,
+    positionScaler : 2.5,
 }
 
 

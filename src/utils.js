@@ -1,8 +1,8 @@
 
-export const circleCoords = (numImages, centerX, centerY, radius) => {
+export const circleCoords = (numCrowdCircles, centerX, centerY, radius) => {
     console.log(centerX, radius);
-    const inc = 360/numImages;
-    const points = range(numImages);
+    const inc = 360/numCrowdCircles;
+    const points = range(numCrowdCircles);
     return points.map(idx => {
         const theta = degreesToRadians(inc * idx);
         return ({
@@ -26,6 +26,8 @@ export const getDistance = (pos1, pos2) => {
   
 
 export const degreesToRadians = angle => (Math.PI * angle) / 180;
+export const radiansToDegrees = angle => (angle * (180/Math.PI) + 360) % 360;
+
 const range = count => Array.from(Array(count).keys());
 
 export const mapVal = (value, x1, y1, x2, y2) => (value - x1) * (y2 - x2) / (y1 - x1) + x2;
@@ -35,6 +37,14 @@ export const constrainTheta = ( theta ) => {
     const thetaMax = 45;
     return theta < thetaMin ?  thetaMin : theta > thetaMax ? thetaMax : theta; 
 }
+
+export const getCirclePos = (centerX, centerY, r, theta) => {
+    return ({
+        x: centerX + (r * Math.cos(theta)),
+        y: centerY + (r * Math.sin(theta)),
+    })
+}
+
 
 export const getControlPos = (offsetX, offsetY, r, theta) => {
 
@@ -46,9 +56,9 @@ export const getControlPos = (offsetX, offsetY, r, theta) => {
 
 
 
-export const getAngles = (numImages) => {
-    const inc = 360/numImages;
-    const angles = range(numImages);
+export const getAngles = (numCrowdCircles) => {
+    const inc = 360/numCrowdCircles;
+    const angles = range(numCrowdCircles);
     return angles.map(idx => {
         return degreesToRadians(inc * idx)
     })

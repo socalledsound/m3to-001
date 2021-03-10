@@ -1,7 +1,7 @@
 import { sounds } from '../sounds';
 import { reverseBuffers } from './audio.utils';
 import  store  from '../store';
-const numSounds = sounds.length;
+import { numSounds } from '../../globalSettings';
 
 class CrowdSounds {
     constructor(){
@@ -60,10 +60,6 @@ class CrowdSounds {
 
     
     stop = (idx) => {
-        // console.log(idx);
-        // console.log(this);
-        // const imageButton = store.getState().imageButtonsSlice.imageButtons.filter(imageButton => imageButton.idx === idx)[0];
-        // console.log(imageButton);
         this.sources[idx].stop(0);
         this.playingSounds[idx] = false;
     }

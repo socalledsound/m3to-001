@@ -31,7 +31,7 @@ class ImageButtonSVG extends Component {
                 // const { xModification, yModification } = this.state;
                 const {idx, crowdCircle} = this.props;
                 const { points, inc, center, imageButtonSize, angles } = crowdCircle;
-        
+            // console.log(points, center);
                 // i think this center.x/2 offset is a mistake!!!  and maybe the cause of my earlier issues ??
                 const newImageButton = new ImageButton( idx, inc, 
                                                         points[idx].x + center.x/2, 
@@ -188,8 +188,14 @@ class ImageButtonSVG extends Component {
 
     render(){
        
-        const {idx, image, crowdCircle, imageButton} = this.props;
+        const {idx, images, crowdCircle, imageButton} = this.props;
         const { id } = crowdCircle;
+        
+        if(imageButton != null){
+            // console.log(images[imageButton.imageIdx]);
+            // console.log(imageButton.imageIdx);
+        }
+       
         
         
         return ( 
@@ -198,7 +204,7 @@ class ImageButtonSVG extends Component {
             <g transform={`rotate(0,${imageButton.pos.x}, ${imageButton.pos.y})`}>
                 <defs>
                     <pattern id={`image${idx + id}`} height="100%" width="100%" patternContentUnits = "objectBoundingBox">
-                         <image x="0" y="0" height="1" width="1" xlinkHref={image} preserveAspectRatio = "none" ></image>
+                         <image x="0" y="0" height="1" width="1" xlinkHref={images[imageButton.imageIdx].default} preserveAspectRatio = "none" ></image>
                     </pattern>
                 </defs>
                 
