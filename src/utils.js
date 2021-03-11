@@ -27,14 +27,22 @@ export const getDistance = (pos1, pos2) => {
 
 export const degreesToRadians = angle => (Math.PI * angle) / 180;
 export const radiansToDegrees = angle => (angle * (180/Math.PI) + 360) % 360;
+export const radiansToDegrees2 = angle => (angle >= 0 ? angle : (2*Math.PI + angle)) * 360 / (2*Math.PI)
 
 const range = count => Array.from(Array(count).keys());
 
 export const mapVal = (value, x1, y1, x2, y2) => (value - x1) * (y2 - x2) / (y1 - x1) + x2;
 
-export const constrainTheta = ( theta ) => {
+export const constrainTheta = ( theta, orientationTheta ) => {
     const thetaMin = -45;
     const thetaMax = 45;
+
+    if(theta > 0){
+        if(theta > 45)
+        adjustedTheta = 45 
+    }
+
+
     return theta < thetaMin ?  thetaMin : theta > thetaMax ? thetaMax : theta; 
 }
 

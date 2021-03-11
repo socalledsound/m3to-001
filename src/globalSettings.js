@@ -15,7 +15,7 @@ export const centerY = canvasHeight/2.0;
 //crowd circle
 export const crowdCircleRadius = canvasWidth/(numCrowdCircles);
 const backgroundCircleScaler = 2.25;
-const controlUnitScaler = 0.4;
+const controlUnitScaler = 0.25;
 const imageScaler = numCrowdCircles/2.5;
 export const gearSpeed = 0.3;
 export const crowdCircleRotationSpeed = 0.3;
@@ -29,9 +29,9 @@ export const crowdCircles = [crowdCircle1];
 
 //playCircle
 export const playCircleSettings = {
-    playCircleSizeScaler : 0.1,
-    playCircleXscaler : 0.2,
-    playCircleYscaler : 0.125,
+    playCircleSizeScaler : 0.08,
+    playCircleXscaler : 0.125,
+    playCircleYscaler : 0,
     fill : '#FFFFFF99',
     hoverFill : '#FF00FF99',
     activeFill : '#00FF0099',

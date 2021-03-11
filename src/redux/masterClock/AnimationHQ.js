@@ -68,7 +68,7 @@ class AnimationHQ  {
                 // console.log(imageButton.rotating);
                 newImageButton.imageTheta += imageButton.pitchControl.val * imageButton.rotateDir;
                 newImageButton.changeImageCounter++;
-                if(newImageButton.changeImageCounter > 3){
+                if(newImageButton.changeImageCounter > Math.ceil(6 / imageButton.pitchControl.val)){
                     newImageButton.imageIdx =  newImageButton.imageIdx = (newImageButton.imageIdx + 1)%newImageButton.numImages;
                     newImageButton.changeImageCounter = 0;
                 } 

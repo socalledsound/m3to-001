@@ -1,12 +1,14 @@
-import { degreesToRadians, getControlPos, getMarkCoords, mapVal, constrainTheta } from '../../utils';
+import { degreesToRadians, radiansToDegrees2, getControlPos, getMarkCoords, mapVal, constrainTheta } from '../../utils';
 
 class Slider {
     constructor (idx, inc, x, y, imageButtonSize, settings ){
+        this.idx = idx;
         this.type = settings.type;
         this.rotationCenterPos = {x: x, y: y};
         this.originalTheta = idx * inc;
         this.orientationTheta = idx * inc;
         this.currentTheta = this.originalTheta;
+        this.currentThetaOffset = 0;
         this.parentSize = imageButtonSize; 
         this.settings = settings;
         this.pos = getControlPos(x, y, imageButtonSize * settings.positionScaler, degreesToRadians(idx * inc));
@@ -52,22 +54,36 @@ class Slider {
         // const mouseDist = mousePos.y - mouseRef.y;
         //const constrainedTheta = constrainTheta(mouseDist/3);
         // console.log(mousePos.x + window.innerWidth/4, this.rotationCenterPos, this.pos);
-        const theta = Math.atan2((mousePos.y + window.innerHeight/4) - this.rotationCenterPos.y, (mousePos.x + window.innerWidth/4) - this.rotationCenterPos.x );
+        const y = (mousePos.y + window.innerHeight/4) - this.rotationCenterPos.y;
+        const x = (mousePos.x + window.innerWidth/4) - this.rotationCenterPos.x; 
+       
+        const theta = Math.atan2(y, x);
         // const theta = Math.atan2(0, -100);
-        // console.log(theta);
-        const convertedTheta = theta * (180/Math.PI);
-        console.log(this.originalTheta);
-        const normalizedTheta = convertedTheta - this.originalTheta;
-        console.log(normalizedTheta);
-        const constrainedTheta = constrainTheta(normalizedTheta, this.originalTheta);
-        console.log(constrainedTheta);
+         console.log(theta);
+        //const updatedTheta = theta >= 0 ? theta : (theta + (Math.PI * 2));
+        // const updatedTheta = this.idx > 0 ? theta >=0 ? theta : ((2*Math.PI) + theta) : theta;
+        const updatedTheta = theta;
+        let convertedTheta;
+        if(theta === 0){
+            convertedTheta = 360;
+        } else {
+            convertedTheta = radiansToDegrees2(updatedTheta);
+        } 
+        // console.log(this.originalTheta);
+        
+        const normalizedTheta = convertedTheta === 0 ? 360 : convertedTheta - this.orientationTheta;
+
+        // console.log(normalizedTheta);
+        const constrainedTheta = constrainTheta(normalizedTheta, this.orientationTheta);
+        // const constrainedTheta = normalizedTheta < ;
+        // console.log(constrainedTheta);
         this.updateTheta(constrainedTheta);
         this.updateVal(constrainedTheta);
         this.updatePos(constrainedTheta);
     }
 
 
-    updateTheta = (theta )=> {
+    updateTheta = (theta)=> {
         this.currentThetaOffset = this.originalTheta + theta;
     }
 
