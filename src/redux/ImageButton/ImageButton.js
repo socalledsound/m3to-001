@@ -1,8 +1,9 @@
-import { degreesToRadians, radiansToDegrees } from '../../utils';
+// import { degreesToRadians, radiansToDegrees } from '../../utils';
 import RotateControl from './RotateControl';
 // import VolumeControl from './VolumeControl';
 // import PitchControl from './PitchControl';
-import { centerX, centerY, crowdCircleRadius, imageButton, volumeControl, pitchControl  } from '../../globalSettings';
+// import { centerX, centerY, crowdCircleRadius, imageButton, volumeControl, pitchControl  } from '../../globalSettings';
+import { imageButton, volumeControl, pitchControl  } from '../../globalSettings';
 import Slider from './Slider';
 import CrowdCircle from '../CrowdCircle';
 

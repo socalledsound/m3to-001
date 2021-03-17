@@ -37,10 +37,10 @@ export const constrainTheta = ( theta, orientationTheta ) => {
     const thetaMin = -45;
     const thetaMax = 45;
 
-    if(theta > 0){
-        if(theta > 45)
-        adjustedTheta = 45 
-    }
+    // if(theta > 0){
+    //     if(theta > 45)
+    //     adjustedTheta = 45 
+    // }
 
 
     return theta < thetaMin ?  thetaMin : theta > thetaMax ? thetaMax : theta; 

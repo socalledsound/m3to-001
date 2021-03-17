@@ -1,4 +1,4 @@
-import { degreesToRadians, radiansToDegrees2, getControlPos, getMarkCoords, mapVal, constrainTheta } from '../../utils';
+import { degreesToRadians, radiansToDegrees, getControlPos, getMarkCoords, mapVal, constrainTheta } from '../../utils';
 
 class Slider {
     constructor (idx, inc, x, y, imageButtonSize, settings ){
@@ -67,15 +67,15 @@ class Slider {
         if(theta === 0){
             convertedTheta = 360;
         } else {
-            convertedTheta = radiansToDegrees2(updatedTheta);
+            convertedTheta = radiansToDegrees(updatedTheta);
         } 
         // console.log(this.originalTheta);
         
         const normalizedTheta = convertedTheta === 0 ? 360 : convertedTheta - this.orientationTheta;
 
         // console.log(normalizedTheta);
-        const constrainedTheta = constrainTheta(normalizedTheta, this.orientationTheta);
-        // const constrainedTheta = normalizedTheta < ;
+         const constrainedTheta = constrainTheta(normalizedTheta, this.orientationTheta);
+        // const constrainedTheta = normalizedTheta;
         // console.log(constrainedTheta);
         this.updateTheta(constrainedTheta);
         this.updateVal(constrainedTheta);
@@ -89,7 +89,7 @@ class Slider {
 
     updateVal = (theta) => {
 
-        this.val = mapVal(theta, 45, -45, 0.0, 2.0);
+        this.val = mapVal(theta, 0, 360, 0.0, 2.0);
 
     }
 
