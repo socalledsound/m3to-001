@@ -38,21 +38,15 @@ class CrowdSounds {
      }
 
     play(idx, audioParameters, dir){
-        const imageButton = store.getState().imageButtonsSlice.imageButtons.filter(imageButton => imageButton.idx === idx)[0];
-        const vol = imageButton.volumeControl.val;
-        const rate = imageButton.pitchControl.val;
-        // console.log(rate);
-        this.gainNodes[idx].gain.value = vol;
+        this.gainNodes[idx].gain.value = audioParameters.vol;
         const buf = dir > 0 ? this.buffers[idx] : this.reversedBuffers[idx]; 
-        // const offset = Math.abs(audioParameters.offset)%buf.duration;
         const offset = Math.abs(0)%buf.duration;
         this.sources[idx] = this.audioContext.createBufferSource();
         this.sources[idx].buffer = buf;
-        // this.sources[idx].connect(this.context.destination);
         this.gainNodes[idx].connect(this.audioContext.destination);
         this.sources[idx].connect(this.gainNodes[idx]);
         this.sources[idx].loop = true;
-        this.sources[idx].playbackRate.value = rate;
+        this.sources[idx].playbackRate.value = audioParameters.rate;
         this.sources[idx].start(0, offset);
         this.playingSounds[idx] = true;
     }
