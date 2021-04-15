@@ -5,7 +5,7 @@ import RotateControl from './RotateControl';
 // import { centerX, centerY, crowdCircleRadius, imageButton, volumeControl, pitchControl  } from '../../globalSettings';
 import { imageButton, volumeControl, pitchControl  } from '../../globalSettings';
 import Slider from './Slider';
-import CrowdCircle from '../CrowdCircle';
+// import CrowdCircle from '../CrowdCircle';
 
 class ImageButton {
     constructor(idx, inc, x, y, imageButtonSize, theta){

@@ -1,9 +1,10 @@
 import store from '../store';
-import { getDistance, constrainTheta, getCirclePos, degreesToRadians, radiansToDegrees } from '../../utils';
+// import { getDistance, constrainTheta, getCirclePos, degreesToRadians, radiansToDegrees } from '../../utils';
+import { getCirclePos, degreesToRadians } from '../../utils';
 import { crowdCircleRadius, crowdCircleRotationSpeed, centerX, centerY } from '../../globalSettings';
 import { updateTickTime } from '../masterClock/masterClock.actions';
 import { updateVolume, updatePitch } from '../audio/audio.actions';
-import { incrementTheta } from '../gearAnimationReducer/gearAnimation.actions';
+// import { incrementTheta } from '../gearAnimationReducer/gearAnimation.actions';
 import { updateImageButton } from '../imageButtonReducer/imageButtons.actions';
 
 class AnimationHQ  {
